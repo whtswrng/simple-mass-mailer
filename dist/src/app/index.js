@@ -28,10 +28,11 @@ function start() {
 }
 function prepareInput() {
     return __awaiter(this, void 0, void 0, function* () {
-        const sender = process.argv[2];
+        const sender = process.argv[3];
         const poolConfig = process.argv[2];
-        const recipientsFilePath = process.argv[3];
-        const emailMessageFilePath = process.argv[4];
+        const recipientsFilePath = process.argv[4];
+        const emailMessageFilePath = process.argv[5];
+        console.log(poolConfig);
         inputParser.setInput(sender, poolConfig, recipientsFilePath, emailMessageFilePath);
         yield inputParser.parse();
     });

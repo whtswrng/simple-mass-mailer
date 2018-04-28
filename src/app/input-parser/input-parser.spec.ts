@@ -4,8 +4,8 @@ import * as chai from 'chai';
 import * as sinonChai from 'sinon-chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as sinon from 'sinon';
-import {InputParser, InvalidFileContentError} from "./input-parser";
-import {FileSystem} from "./file-system/file-system";
+import {InputParser, InvalidFileContentError} from "./";
+import {FileSystem} from "../file-system/file-system";
 import {SinonStub} from "sinon";
 
 chai.use(sinonChai);

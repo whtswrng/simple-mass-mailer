@@ -1,5 +1,5 @@
 import {MassEmailSender} from "./mass-email-sender/mass-email-sender";
-import {InputParser} from "./input-parser";
+import {InputParser} from "./input-parser/input-parser";
 import {NodeFileSystem} from "./file-system/node-file-system";
 import {NodeMailerTransporter} from "./email-transporter/node-mailer-transporter";
 
@@ -18,11 +18,12 @@ async function start() {
 }
 
 async function prepareInput() {
-    const sender = process.argv[2];
+    const sender = process.argv[3];
     const poolConfig = process.argv[2];
-    const recipientsFilePath = process.argv[3];
-    const emailMessageFilePath = process.argv[4];
+    const recipientsFilePath = process.argv[4];
+    const emailMessageFilePath = process.argv[5];
 
+    console.log(poolConfig)
     inputParser.setInput(sender, poolConfig, recipientsFilePath, emailMessageFilePath);
     await inputParser.parse();
 }

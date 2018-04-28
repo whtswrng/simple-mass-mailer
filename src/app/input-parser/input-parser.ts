@@ -1,4 +1,4 @@
-import {FileSystem} from "./file-system/file-system";
+import {FileSystem} from "../file-system/file-system";
 
 export class InputParser {
 
