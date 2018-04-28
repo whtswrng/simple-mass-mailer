@@ -1,0 +1,32 @@
+{
+  "name": "simple-json-mailer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node ./src/app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.0.7",
+    "@types/chai-as-promised": "^7.1.0",
+    "@types/colors": "^1.2.1",
+    "@types/mocha": "^2.2.44",
+    "@types/node": "^8.0.53",
+    "@types/sinon": "^4.0.0",
+    "@types/sinon-chai": "^2.7.29",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^7.1.1",
+    "expect": "^21.2.1",
+    "mocha": "^4.0.1",
+    "sinon": "^4.1.2",
+    "sinon-chai": "^3.0.0",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.6.2"
+  },
+  "dependencies": {
+    "colors": "^1.2.1"
+  },
+  "author": "",
+  "license": "ISC"
+}
