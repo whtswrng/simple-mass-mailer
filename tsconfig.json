@@ -3,12 +3,13 @@
     "module": "commonjs",
     "removeComments": true,
     "preserveConstEnums": true,
+    "outDir": "dist",
     "sourceMap": true,
     "target": "es2015",
     "lib": ["es2015"]
   },
   "include": [
-    "./src/**/*",
+    "./src/app/**/*",
     "./bin"
   ],
   "exclude": [

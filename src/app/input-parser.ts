@@ -13,7 +13,7 @@ export class InputParser {
 
     }
 
-    public setData(sender: string, poolConfig: string, recipientsFilePath: string, emailMessagePath: string): void {
+    public setInput(sender: string, poolConfig: string, recipientsFilePath: string, emailMessagePath: string): void {
         this.sender = sender;
         this.poolConfig = poolConfig;
         this.recipientsFilePath = recipientsFilePath;

@@ -5,6 +5,7 @@ import * as sinonChai from 'sinon-chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as sinon from 'sinon';
 import {EmailNotSentError, MassEmailSender} from "./mass-email-sender";
+import {EmailTransporter} from "../email-transporter/email-transporter";
 
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
@@ -13,14 +14,15 @@ describe('MassEmailSender', () => {
 
     const recipients = ['foo@bar.com', 'blub@blob.com'];
     const message = 'hello';
+    const sender = 'senderEmail@bobo.com';
     let massEmailSender: MassEmailSender;
     let emailTransporter;
 
     beforeEach((() => {
         emailTransporter = {
             send: sinon.spy()
-        };
-        massEmailSender = new MassEmailSender(emailTransporter, recipients, message);
+        } as EmailTransporter;
+        massEmailSender = new MassEmailSender(emailTransporter, recipients, sender, message);
     }));
 
     it('should be properly created', () => {
@@ -31,7 +33,7 @@ describe('MassEmailSender', () => {
         await massEmailSender.process();
 
         for(const recipient of recipients) {
-            expect(emailTransporter.send).to.have.been.calledWith(recipient, message);
+            expect(emailTransporter.send).to.have.been.calledWith(sender, recipient, message);
         }
     });
 

@@ -28,7 +28,7 @@ describe('InputParser', () => {
             readFile: readFileStub
         } as FileSystem;
         inputParser = new InputParser(fs);
-        inputParser.setData(sender, poolConfig, recipientsFilePath, emailMessagePath);
+        inputParser.setInput(sender, poolConfig, recipientsFilePath, emailMessagePath);
     }));
 
     it('should be properly created', () => {
