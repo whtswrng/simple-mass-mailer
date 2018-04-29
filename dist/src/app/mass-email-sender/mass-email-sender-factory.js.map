@@ -1,0 +1,1 @@
+{"version":3,"file":"mass-email-sender-factory.js","sourceRoot":"","sources":["../../../../src/app/mass-email-sender/mass-email-sender-factory.ts"],"names":[],"mappings":";;AAAA,2DAAoD;AACpD,0FAAmF;AAGnF;IAEW,WAAW,CAAC,UAAkB,EAAE,MAAc;QACjD,MAAM,gBAAgB,GAAG,IAAI,+CAAqB,CAAC,UAAU,CAAC,CAAC;QAC/D,MAAM,CAAC,IAAI,mCAAe,CAAC,gBAAgB,EAAE,MAAM,CAAC,CAAC;IACzD,CAAC;CAEJ;AAPD,wDAOC"}

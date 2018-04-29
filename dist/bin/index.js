@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 'use strict';
-process.title = 'simple-json-mailer';
+process.title = 'cli-mailer';
 require('../src/app/index');
 //# sourceMappingURL=index.js.map

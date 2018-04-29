@@ -1,11 +1,14 @@
 {
-  "name": "simple-mass-mailer",
+  "name": "cli-mailer",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "ts-node ./src/app",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "cli-mailer": "./dist/bin/index.js"
   },
   "devDependencies": {
     "@types/chai": "^4.0.7",
@@ -26,7 +29,6 @@
     "typescript": "^2.6.2"
   },
   "dependencies": {
-    "colors": "^1.2.1",
     "nodemailer": "^4.6.4"
   },
   "author": "",

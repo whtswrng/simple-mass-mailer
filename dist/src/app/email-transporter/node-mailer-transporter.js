@@ -13,11 +13,12 @@ class NodeMailerTransporter {
     constructor(poolConfig) {
         this.transporter = nodemailer.createTransport(poolConfig);
     }
-    send(sender, recipient, message) {
+    send(sender, recipient, subject, message) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.transporter.sendMail({
                 from: sender,
                 to: recipient,
+                subject: subject,
                 html: message
             });
         });
