@@ -10,12 +10,12 @@ cli-mailer <smtps://username:password@smtp.example.com/?pool=true> <sender@email
 cli-mailer smtps://thomas47:password47@smtp.gmail.com/?pool=true thomas47@gmail.com "Email subject" ./recipients.json ./message.txt
 ```
 
-Content of *"recipients.json"*:
+Content of **"recipients.json"**:
 ```json
 ["thomas.johnes@gmail.com", "mark.zuckerberg@facebook.com", "elon.musk@tesla.com"]
 ```
 
-Content of "message.txt":
+Content of **"message.txt"**:
 ```html
 <strong>Hello!</strong></br>
 How are u today?

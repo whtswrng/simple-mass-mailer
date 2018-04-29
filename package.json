@@ -1,12 +1,14 @@
 {
   "name": "cli-mailer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "ts-node ./src/app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": "https://github.com/whtswrng/simple-mass-mailer",
+  "keywords": ["cli", "cli mailer", "send email", "mass email", "json email"],
   "bin": {
     "cli-mailer": "./dist/bin/index.js"
   },
