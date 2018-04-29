@@ -2,20 +2,19 @@ import {EmailTransporter} from "../email-transporter/email-transporter";
 
 export class MassEmailSender {
 
-    constructor(private emailTransporter: EmailTransporter, private recipients: Array<string>, private sender: string,
-                private message: string) {
+    constructor(private emailTransporter: EmailTransporter) {
 
     }
 
-    public async process(): Promise<void> {
-        for(const recipient of this.recipients) {
-            await this.sendEmail(recipient);
+    public async process(recipients: Array<string>, sender: string, message: string): Promise<void> {
+        for(const recipient of recipients) {
+            await this.sendEmail(sender, recipient, message);
         }
     }
 
-    private async sendEmail(recipient) {
+    private async sendEmail(sender: string, recipient: string, message: string): Promise<void> {
         try {
-            await this.emailTransporter.send(this.sender, recipient, this.message);
+            await this.emailTransporter.send(sender, recipient, message);
         } catch (e) {
             throw new EmailNotSentError(`Could not sent email to ${recipient}, because of: ${e.message}`);
         }

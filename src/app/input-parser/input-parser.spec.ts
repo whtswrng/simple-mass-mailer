@@ -4,9 +4,9 @@ import * as chai from 'chai';
 import * as sinonChai from 'sinon-chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as sinon from 'sinon';
-import {InputParser, InvalidFileContentError} from "./";
 import {FileSystem} from "../file-system/file-system";
 import {SinonStub} from "sinon";
+import {InputParser, InvalidFileContentError} from "./input-parser";
 
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
@@ -18,28 +18,32 @@ describe('InputParser', () => {
     const recipientsFilePath = 'foo bar baz';
     const emailMessagePath = 'email message';
     const poolConfig = 'smtps://user:pasd@asd.google.com';
+    const emailMessageContent = 'hello sir!';
     let inputParser: InputParser;
     let fs;
     let readFileStub: SinonStub;
 
-    beforeEach((() => {
+    beforeEach(async () => {
         readFileStub = sinon.stub();
+        readFileStub.onCall(0).resolves(JSON.stringify(recipients));
+        readFileStub.onCall(1).resolves(emailMessageContent);
         fs = {
             readFile: readFileStub
         } as FileSystem;
         inputParser = new InputParser(fs);
-        inputParser.setInput(sender, poolConfig, recipientsFilePath, emailMessagePath);
-    }));
+    });
 
     it('should be properly created', () => {
         expect(inputParser).to.be.instanceof(InputParser);
     });
-    
-    it('should get sender', () => {
+
+    it('should get sender', async () => {
+        await parse();
         expect(inputParser.getSender()).to.equal(sender);
     });
     
-    it('should get pool config', () => {
+    it('should get pool config', async () => {
+        await parse();
         expect(inputParser.getPoolConfig()).to.equal(poolConfig);
     });
 
@@ -50,7 +54,7 @@ describe('InputParser', () => {
         });
 
         it('should read file from correct file path', async () => {
-            await inputParser.parse();
+            await parse();
 
             await expect(fs.readFile).to.have.been.calledWith(recipientsFilePath);
         });
@@ -58,13 +62,13 @@ describe('InputParser', () => {
         it('should throw Error when content in file is not in json format', async () => {
             fs.readFile = sinon.stub().resolves('oh hello }');
 
-            await expect(inputParser.parse()).to.have.been.rejectedWith(InvalidFileContentError, recipientsFilePath);
+            await expect(parse()).to.have.been.rejectedWith(InvalidFileContentError, recipientsFilePath);
         });
 
         it('should parse file content if it is in json format', async () => {
             fs.readFile = sinon.stub().resolves(JSON.stringify(recipients));
 
-            await inputParser.parse();
+            await parse();
 
             expect(inputParser.getRecipients()).to.deep.equal(recipients);
         });
@@ -72,15 +76,9 @@ describe('InputParser', () => {
     });
 
     describe('when try to get an email content', () => {
-        const emailMessageContent = 'hello sir!';
-
-        beforeEach(() => {
-            readFileStub.onCall(0).resolves(JSON.stringify(recipients));
-            readFileStub.onCall(1).resolves(emailMessageContent);
-        });
 
         it('should read file from correct file path', async () => {
-            await inputParser.parse();
+            await parse();
 
             await expect(fs.readFile).to.have.been.calledWith(emailMessagePath);
         });
@@ -88,16 +86,19 @@ describe('InputParser', () => {
         it('should throw error if something is wrong with reading a file content', async () => {
             readFileStub.onCall(1).rejects(new Error('Some FS problem'));
 
-            await expect(inputParser.parse()).to.have.been.rejectedWith(InvalidFileContentError, emailMessagePath);
+            await expect(parse()).to.have.been.rejectedWith(InvalidFileContentError, emailMessagePath);
         });
 
         it('should parse file content', async () => {
-            await inputParser.parse();
+            await parse();
 
             expect(inputParser.getMessage()).to.deep.equal(emailMessageContent);
         });
 
     });
 
+    async function parse() {
+        await inputParser.parse(sender, poolConfig, recipientsFilePath, emailMessagePath);
+    }
 
 });

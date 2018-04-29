@@ -22,7 +22,7 @@ describe('MassEmailSender', () => {
         emailTransporter = {
             send: sinon.spy()
         } as EmailTransporter;
-        massEmailSender = new MassEmailSender(emailTransporter, recipients, sender, message);
+        massEmailSender = new MassEmailSender(emailTransporter);
     }));
 
     it('should be properly created', () => {
@@ -30,7 +30,7 @@ describe('MassEmailSender', () => {
     });
     
     it('should send emails for given recipients', async () => {
-        await massEmailSender.process();
+        await massEmailSender.process(recipients, sender, message);
 
         for(const recipient of recipients) {
             expect(emailTransporter.send).to.have.been.calledWith(sender, recipient, message);
@@ -40,7 +40,8 @@ describe('MassEmailSender', () => {
     it('should throw error if could not sent email', async () => {
         emailTransporter.send = sinon.stub().rejects(new Error('hups'));
 
-        await expect(massEmailSender.process()).to.have.been.rejectedWith(EmailNotSentError, recipients[0]);
+        await expect(massEmailSender.process(recipients, sender, message))
+            .to.have.been.rejectedWith(EmailNotSentError, recipients[0]);
     });
 
 });

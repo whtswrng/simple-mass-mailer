@@ -13,16 +13,17 @@ export class InputParser {
 
     }
 
-    public setInput(sender: string, poolConfig: string, recipientsFilePath: string, emailMessagePath: string): void {
+    public async parse(sender: string, poolConfig: string, recipientsFilePath: string, emailMessagePath: string): Promise<void> {
+        this.setInput(sender, poolConfig, recipientsFilePath, emailMessagePath);
+        await this.parseRecipients();
+        await this.parseMessageContent();
+    }
+
+    private setInput(sender: string, poolConfig: string, recipientsFilePath: string, emailMessagePath: string): void {
         this.sender = sender;
         this.poolConfig = poolConfig;
         this.recipientsFilePath = recipientsFilePath;
         this.emailMessagePath = emailMessagePath;
-    }
-
-    public async parse(): Promise<void> {
-        await this.parseRecipients();
-        await this.parseMessageContent();
     }
 
     private async parseMessageContent(): Promise<void> {
@@ -41,7 +42,7 @@ export class InputParser {
         }
     }
 
-    private throwInvalidFileContentError(e, filePath: string, subject: string): void {
+    private throwInvalidFileContentError(e, subject: string, filePath: string): void {
         throw new InvalidFileContentError(
             `Error occurred while reading ${subject} from file ${filePath}. Details: ${e.message}`
         )

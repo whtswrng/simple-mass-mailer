@@ -1,15 +1,13 @@
-import {NodeFileSystem} from "./file-system/node-file-system";
 import {InputParser} from "./input-parser/input-parser";
 import {NodeMailerTransporter} from "./email-transporter/node-mailer-transporter";
 import {MassEmailSender} from "./mass-email-sender/mass-email-sender";
-import {FileSystem} from "./file-system/file-system";
-import {EmailTransporter} from "./email-transporter/email-transporter";
+import {Logger} from "./logger/logger";
+import {MassEmailSenderFactory} from "./mass-email-sender/mass-email-sender-factory";
 
 export class Application {
 
-    constructor(private fileSystem: FileSystem, private inputParser: InputParser,
-                private emailTransporter: EmailTransporter, private massEmailSender: MassEmailSender,
-                private processArguments: Array<string>) {
+    constructor(private inputParser: InputParser, private massEmailSenderFactory: MassEmailSenderFactory,
+                private processArguments: Array<string>, private logger: Logger) {
 
     }
 
@@ -28,23 +26,18 @@ export class Application {
         const recipientsFilePath = this.processArguments[4];
         const emailMessageFilePath = this.processArguments[5];
 
-        console.log(poolConfig)
-        this.inputParser.setInput(sender, poolConfig, recipientsFilePath, emailMessageFilePath);
-        await this.inputParser.parse();
+        await this.inputParser.parse(sender, poolConfig, recipientsFilePath, emailMessageFilePath);
     }
 
     private async startProcessing () {
-        const emailTransporter = new NodeMailerTransporter(this.inputParser.getPoolConfig());
-        const massEmailSender = new MassEmailSender(
-            emailTransporter, this.inputParser.getRecipients(), this.inputParser.getSender(),
-            this.inputParser.getMessage()
+        const massEmailSender = this.massEmailSenderFactory.instantiate(this.inputParser.getPoolConfig());
+        await massEmailSender.process(
+            this.inputParser.getRecipients(), this.inputParser.getSender(), this.inputParser.getMessage()
         );
-
-        await massEmailSender.process();
     }
 
     private handleError(e): void {
-        console.log(e);
+        this.logger.error(e);
     }
 
 }
