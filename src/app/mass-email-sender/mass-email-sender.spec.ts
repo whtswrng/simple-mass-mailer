@@ -15,6 +15,7 @@ describe('MassEmailSender', () => {
 
     const recipients = ['foo@bar.com', 'blub@blob.com'];
     const message = 'hello';
+    const subject = 'subject';
     const sender = 'senderEmail@bobo.com';
     let massEmailSender: MassEmailSender;
     let logger: Logger;
@@ -36,15 +37,15 @@ describe('MassEmailSender', () => {
     });
 
     it('should send emails for given recipients', async () => {
-        await massEmailSender.process(recipients, sender, message);
+        await massEmailSender.process(recipients, sender, subject, message);
 
         for(const recipient of recipients) {
-            expect(emailTransporter.send).to.have.been.calledWith(sender, recipient, message);
+            expect(emailTransporter.send).to.have.been.calledWith(sender, recipient, subject, message);
         }
     });
 
     it('should log about successfully sent message', async () => {
-        await massEmailSender.process(['fofo@ad.com'], sender, message);
+        await massEmailSender.process(['fofo@ad.com'], sender, subject, message);
 
         expect(logger.log).to.have.been.calledOnce;
     });
@@ -53,7 +54,7 @@ describe('MassEmailSender', () => {
     it('should throw error if could not sent email', async () => {
         emailTransporter.send = sinon.stub().rejects(new Error('hups'));
 
-        await expect(massEmailSender.process(recipients, sender, message))
+        await expect(massEmailSender.process(recipients, sender, subject, message))
             .to.have.been.rejectedWith(EmailNotSentError, recipients[0]);
     });
 

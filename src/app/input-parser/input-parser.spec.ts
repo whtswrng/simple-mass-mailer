@@ -19,6 +19,7 @@ describe('InputParser', () => {
     const emailMessagePath = 'email message';
     const poolConfig = 'smtps://user:pasd@asd.google.com';
     const emailMessageContent = 'hello sir!';
+    const subject = 'some subject';
     let inputParser: InputParser;
     let fs;
     let readFileStub: SinonStub;
@@ -41,7 +42,12 @@ describe('InputParser', () => {
         await parse();
         expect(inputParser.getSender()).to.equal(sender);
     });
-    
+
+    it('should get subject', async () => {
+        await parse();
+        expect(inputParser.getSubject()).to.equal(subject);
+    });
+
     it('should get pool config', async () => {
         await parse();
         expect(inputParser.getPoolConfig()).to.equal(poolConfig);
@@ -98,7 +104,7 @@ describe('InputParser', () => {
     });
 
     async function parse() {
-        await inputParser.parse(sender, poolConfig, recipientsFilePath, emailMessagePath);
+        await inputParser.parse(poolConfig, sender, subject, recipientsFilePath, emailMessagePath);
     }
 
 });

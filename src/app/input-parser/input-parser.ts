@@ -5,6 +5,7 @@ export class InputParser {
     private recipientsFilePath: string;
     private emailMessagePath: string;
     private recipients: Array<string>;
+    private subject: string;
     private sender: string;
     private poolConfig: string;
     private messageContent: string;
@@ -13,14 +14,16 @@ export class InputParser {
 
     }
 
-    public async parse(sender: string, poolConfig: string, recipientsFilePath: string, emailMessagePath: string): Promise<void> {
-        this.setInput(sender, poolConfig, recipientsFilePath, emailMessagePath);
+    public async parse(poolConfig: string, sender: string, subject: string, recipientsFilePath: string,
+                       emailMessagePath: string): Promise<void> {
+        this.setInput(sender, subject, poolConfig, recipientsFilePath, emailMessagePath);
         await this.parseRecipients();
         await this.parseMessageContent();
     }
 
-    private setInput(sender: string, poolConfig: string, recipientsFilePath: string, emailMessagePath: string): void {
+    private setInput(sender: string, subject: string, poolConfig: string, recipientsFilePath: string, emailMessagePath: string): void {
         this.sender = sender;
+        this.subject = subject;
         this.poolConfig = poolConfig;
         this.recipientsFilePath = recipientsFilePath;
         this.emailMessagePath = emailMessagePath;
@@ -62,6 +65,10 @@ export class InputParser {
 
     public getRecipients(): Array<string> {
         return this.recipients;
+    }
+
+    public getSubject(): string {
+        return this.subject;
     }
 
 }

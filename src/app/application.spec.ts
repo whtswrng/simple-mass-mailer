@@ -19,6 +19,7 @@ describe('Application', () => {
     const recipients = ['foo@bar.com'];
     const sender = 'Ferda@ad.com';
     const message = 'oh hi mark';
+    const subject = 'subject';
     let application: Application;
     let massEmailSenderFactory: MassEmailSenderFactory;
     let logger: Logger;
@@ -42,6 +43,7 @@ describe('Application', () => {
             getRecipients: sinon.stub().returns(recipients),
             getPoolConfig: sinon.stub().returns(poolConfig),
             getSender: sinon.stub().returns(sender),
+            getSubject: sinon.stub().returns(subject),
             getMessage: sinon.stub().returns(message)
         };
         processArguments = [];
@@ -71,13 +73,14 @@ describe('Application', () => {
     it('should correctly parsed process arguments', async () => {
         processArguments[2] = 'pool config';
         processArguments[3] = 'sender';
-        processArguments[4] = 'recipients file';
-        processArguments[5] = 'message file';
+        processArguments[4] = 'subject';
+        processArguments[5] = 'recipients file';
+        processArguments[6] = 'message file';
 
         await application.start();
 
         expect(inputParser.parse).to.have.been.calledWith(
-            processArguments[3], processArguments[2], processArguments[4], processArguments[5]
+            processArguments[2], processArguments[3], processArguments[4], processArguments[5], processArguments[6]
         );
     });
 
@@ -85,7 +88,7 @@ describe('Application', () => {
         await application.start();
 
         expect(massEmailSenderFactory.instantiate).to.have.been.calledWith(poolConfig, logger);
-        expect(massEmailSender.process).to.have.been.calledWith(recipients, sender, message);
+        expect(massEmailSender.process).to.have.been.calledWith(recipients, sender, subject, message);
     });
 
     it('should successfully parse process arguments and send email', async () => {

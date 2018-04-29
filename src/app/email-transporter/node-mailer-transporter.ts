@@ -9,10 +9,11 @@ export class NodeMailerTransporter implements EmailTransporter {
         this.transporter = nodemailer.createTransport(poolConfig);
     }
 
-    public async send(sender: string, recipient: string, message: string): Promise<void> {
+    public async send(sender: string, recipient: string, subject: string, message: string): Promise<void> {
         await this.transporter.sendMail({
             from: sender,
             to: recipient,
+            subject: subject,
             html: message
         });
     }
