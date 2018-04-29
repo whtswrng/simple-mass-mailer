@@ -84,7 +84,7 @@ describe('Application', () => {
     it('should process emails', async () => {
         await application.start();
 
-        expect(massEmailSenderFactory.instantiate).to.have.been.calledWith(poolConfig);
+        expect(massEmailSenderFactory.instantiate).to.have.been.calledWith(poolConfig, logger);
         expect(massEmailSender.process).to.have.been.calledWith(recipients, sender, message);
     });
 

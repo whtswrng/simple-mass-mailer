@@ -1,6 +1,4 @@
 import {InputParser} from "./input-parser/input-parser";
-import {NodeMailerTransporter} from "./email-transporter/node-mailer-transporter";
-import {MassEmailSender} from "./mass-email-sender/mass-email-sender";
 import {Logger} from "./logger/logger";
 import {MassEmailSenderFactory} from "./mass-email-sender/mass-email-sender-factory";
 
@@ -20,7 +18,7 @@ export class Application {
         }
     }
 
-    private async prepareInput() {
+    private async prepareInput(): Promise<void> {
         const sender = this.processArguments[3];
         const poolConfig = this.processArguments[2];
         const recipientsFilePath = this.processArguments[4];
@@ -29,8 +27,8 @@ export class Application {
         await this.inputParser.parse(sender, poolConfig, recipientsFilePath, emailMessageFilePath);
     }
 
-    private async startProcessing () {
-        const massEmailSender = this.massEmailSenderFactory.instantiate(this.inputParser.getPoolConfig());
+    private async startProcessing (): Promise<void> {
+        const massEmailSender = this.massEmailSenderFactory.instantiate(this.inputParser.getPoolConfig(), this.logger);
         await massEmailSender.process(
             this.inputParser.getRecipients(), this.inputParser.getSender(), this.inputParser.getMessage()
         );

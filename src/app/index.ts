@@ -1,42 +1,35 @@
-import {MassEmailSender} from "./mass-email-sender/mass-email-sender";
 import {InputParser} from "./input-parser/input-parser";
 import {NodeFileSystem} from "./file-system/node-file-system";
-import {NodeMailerTransporter} from "./email-transporter/node-mailer-transporter";
+import {Application} from "./application";
+import {MassEmailSenderFactory} from "./mass-email-sender/mass-email-sender-factory";
+import {BasicLogger} from "./logger/basic-logger";
+
+enum EXIT_CODE {
+    OK = 0,
+    ERROR = 1
+}
 
 const fileSystem = new NodeFileSystem();
 const inputParser = new InputParser(fileSystem);
+const massEmailSenderFactory = new MassEmailSenderFactory();
+const logger = new BasicLogger();
+
+const application = new Application(inputParser, massEmailSenderFactory, process.argv, logger);
 
 start();
 
 async function start() {
     try {
-        await prepareInput();
-        await startProcessing();
+        await application.start();
+        process.exit(EXIT_CODE.OK);
     } catch (e) {
         handleError(e);
     }
 }
 
-async function prepareInput() {
-    const sender = process.argv[3];
-    const poolConfig = process.argv[2];
-    const recipientsFilePath = process.argv[4];
-    const emailMessageFilePath = process.argv[5];
-
-    console.log(poolConfig)
-    inputParser.setInput(sender, poolConfig, recipientsFilePath, emailMessageFilePath);
-    await inputParser.parse();
-}
-
-async function startProcessing () {
-    const emailTransporter = new NodeMailerTransporter(inputParser.getPoolConfig());
-    const massEmailSender = new MassEmailSender(
-        emailTransporter, inputParser.getRecipients(), inputParser.getSender(), inputParser.getMessage()
-    );
-
-    await massEmailSender.process();
-}
-
-function handleError(e): void {
+function handleError(e) {
+    console.log('Unhandled exception in application!');
     console.log(e);
+    process.exit(EXIT_CODE.ERROR);
 }
+
