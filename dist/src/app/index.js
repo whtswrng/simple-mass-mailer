@@ -13,6 +13,7 @@ const node_file_system_1 = require("./file-system/node-file-system");
 const application_1 = require("./application");
 const mass_email_sender_factory_1 = require("./mass-email-sender/mass-email-sender-factory");
 const basic_logger_1 = require("./logger/basic-logger");
+const help_1 = require("./help");
 var EXIT_CODE;
 (function (EXIT_CODE) {
     EXIT_CODE[EXIT_CODE["OK"] = 0] = "OK";
@@ -26,22 +27,11 @@ const application = new application_1.Application(inputParser, massEmailSenderFa
 init();
 function init() {
     if (process.argv[2] === '-h' || process.argv[2] === '--help') {
-        printHelp();
+        help_1.printHelp();
     }
     else {
         startApplication();
     }
-}
-function printHelp() {
-    console.log('Usage:');
-    console.log('       cli-mailer <smtps://username:password@smtp.example.com/?pool=true> <sender@email.address.com> <subject> <recipients-path.json> <message-path> ');
-    console.log('\nExamples:');
-    console.log('       cli-mailer smtps://thomas47:password47@smtp.gmail.com/?pool=true thomas47@gmail.com "Email subject" ./recipients.json ./message.txt');
-    console.log('\nContent of "recipients.json":');
-    console.log('       ["thomas.johnes@gmail.com", "mark.zuckerberg@facebook.com", "elon.musk@tesla.com"]');
-    console.log('\nContent of "message.txt":');
-    console.log('       <strong>Hello!</strong></br>');
-    console.log('        How are u today?');
 }
 function startApplication() {
     return __awaiter(this, void 0, void 0, function* () {
